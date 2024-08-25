@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const mongoose = require('mongoose');
-const uri = 'mongodb+srv://elemyoav:v4qbxHuh@grades.pbevejl.mongodb.net/?retryWrites=true&w=majority&appName=grades';
+const uri = 'mongodb+srv://elem:v4qbxHuh@grades.pbevejl.mongodb.net/?retryWrites=true&w=majority&appName=grades';
 
 mongoose.connect(uri)
 .then(() => console.log('Connected to MongoDB Atlas!'))
