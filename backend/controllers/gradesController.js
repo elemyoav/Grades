@@ -26,9 +26,8 @@ const AddGrade = async (req, res) =>{
 
 const GetGrades = async(req, res) => {
     try{
-        const grade = await Grade.find({})
-
-        res.status(StatusCodes.OK).json(grade)
+        const grades = await Grade.find({})
+        res.status(StatusCodes.OK).json(grades);
     }
     catch(error){
         console.log(error)
@@ -63,9 +62,11 @@ const GetGrade = async(req, res) => {
 
 const UpdateGrade = async(req, res) => {
     try{
-        const {id} = req.params;
-        const updated_fields = req.body;
 
+        const {id} = req.params;
+
+        const updated_fields = req.body;
+        
         await Grade.updateOne({_id: id}, {$set: updated_fields}, {new: false});
 
         const grade = await Grade.findById(id);
