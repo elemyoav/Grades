@@ -1,0 +1,8 @@
+add google authentication - gcp
+
+add user table
+
+refactor access to grades table only for authenticated users
+
+refactor user table to also have grades (relational?)
+

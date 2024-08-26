@@ -1,0 +1,15 @@
+services:
+  next-frontend:
+    image: elem/next-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    
+  backend:
+    image: elem/backend
+    ports:
+      - "3001:3001"
+
+  
+  

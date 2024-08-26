@@ -1,7 +1,5 @@
-import './App.css';
-// require("dotenv").config();
 import axios from "axios";
-import { useEffect, useState, useContext, createContext } from 'react';
+import { useState, useContext, createContext } from 'react';
 
 
 const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:3001";
@@ -26,33 +24,18 @@ const totalWeight = (grades) => {
   return weights;
 }
 
-function App() {
+function App({initGrades, user}) {
   // read the grades from the json file
-  const [grades, setGrades] = useState([]);
+  const [grades, setGrades] = useState(initGrades);
   const [expand, setExpand] = useState(false);
-  const [editRows, setEditRows] = useState([])
-  useEffect( () => {
-    const fetchData = async () => {
-        try {
-          const response = await axios.get(GRADES_URL);
-          const data = response.data
-          setGrades(data);
-          setEditRows(Array(data.length).fill(false));
-        } 
-        catch (error) {
-          console.error('Error fetching data:', error);
-        }
-    };
-    // Call the fetchData function
-    fetchData();
-  }, []);
-
+  const [editRows, setEditRows] = useState(Array(initGrades.length).fill(false))
 
   const onExpand = () => {setExpand(!expand)};
 
   return (
     < GradesContext.Provider value={{grades, setGrades, editRows, setEditRows}}>
     <div>
+      <h1> Welcome {user} </h1>
       <GradeTable expand={expand} onExpand={onExpand} />
       <Avg />
       <Weight />
