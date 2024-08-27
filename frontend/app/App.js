@@ -1,8 +1,9 @@
 import axios from "axios";
 import { useState, useContext, createContext } from 'react';
+require("dotenv").config();
 
-
-const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:3001";
+// const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+const BACKEND_URL = "http://localhost:3001";
 const GRADES_URL = BACKEND_URL + "/grades";
 const GradesContext = createContext();
 
@@ -24,8 +25,8 @@ const totalWeight = (grades) => {
   return weights;
 }
 
-function App({initGrades, user}) {
-  // read the grades from the json file
+function App({initGrades, user_id}) {
+
   const [grades, setGrades] = useState(initGrades);
   const [expand, setExpand] = useState(false);
   const [editRows, setEditRows] = useState(Array(initGrades.length).fill(false))
@@ -33,9 +34,8 @@ function App({initGrades, user}) {
   const onExpand = () => {setExpand(!expand)};
 
   return (
-    < GradesContext.Provider value={{grades, setGrades, editRows, setEditRows}}>
+    < GradesContext.Provider value={{grades, setGrades, editRows, setEditRows, user_id}}>
     <div>
-      <h1> Welcome {user} </h1>
       <GradeTable expand={expand} onExpand={onExpand} />
       <Avg />
       <Weight />
@@ -80,7 +80,6 @@ function GradeRow({grade}){
     const new_edit_rows = editRows.slice();
     const idx = grades.findIndex(g=> g._id === grade._id);
     new_edit_rows[idx] = true;
-    console.log(new_edit_rows)
     setEditRows(new_edit_rows);
   };
 
@@ -99,15 +98,16 @@ function InputRow({onExpand}){
   const [name, setName] = useState('');
   const [grade, setGrade] = useState('');
   const [weight, setWeight] = useState('');
-  const {grades, setGrades, editRows, setEditRows} = useContext(GradesContext);
+  const {grades, setGrades, editRows, setEditRows, user_id} = useContext(GradesContext);
   const onSubmit = async () => {
-    await axios.post(GRADES_URL, {
+    const new_grade = await axios.post(GRADES_URL, {
       name: name,
       grade: grade,
-      weight: weight
+      weight: weight,
+      user_id: user_id,
     })
 
-    const new_grades = [...grades, {name: name, grade: Number(grade), weight: Number(weight)}];
+    const new_grades = [...grades, new_grade.data];
     const new_edit_rows = [...editRows, false];
     setName('');
     setGrade('');
@@ -140,8 +140,7 @@ function EditRow({grade}){
     };
 
     const res = await axios.put(GRADES_URL + "/" + grade._id, updated_grade);
-    console.log(res)
-
+    
     const updated_grades = grades.slice();
     const updated_edit_rows = editRows.slice()
     const idx = updated_grades.findIndex(g => g._id === grade._id);

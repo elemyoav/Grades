@@ -8,7 +8,7 @@ RUN npm install
 
 ENV PORT=3000
 
-ENV BACKEND_URL=http://localhost:3001
+ENV NEXT_PUBLIC_BACKEND_URL=http://localhost:3001
 
 EXPOSE 3000
 

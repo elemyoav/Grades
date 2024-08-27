@@ -1,8 +1,14 @@
-add google authentication - gcp
 
-add user table
+add actual authentication, only authenticated user can be on page X/user
 
-refactor access to grades table only for authenticated users
+move secrets somewhere so we can push the changes
 
-refactor user table to also have grades (relational?)
+add css (tailwind?)
 
+grafana?
+
+k8s?
+
+tests?
+ci?
+(GHA)

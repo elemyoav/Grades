@@ -1,20 +1,26 @@
 const { StatusCodes } = require("http-status-codes");
 
 
-const Grade = require('../schemas/Grades')
+const Grade = require('../schemas/Grades');
+const User = require('../schemas/User');
 
 
 const AddGrade = async (req, res) =>{
     try{
-        const {name, grade, weight} = req.body;
+        const {name, grade, weight, user_id} = req.body;
         
         const grade_ = await Grade.create(
             {
                 name,
                 grade,
-                weight
+                weight,
+                user_id
             }
         );
+
+        const user = await User.findById(user_id);
+        user.grades = user.grades.concat(grade_._id);
+        await user.save();
 
         res.status(StatusCodes.CREATED).json(grade_);
     }
@@ -26,7 +32,8 @@ const AddGrade = async (req, res) =>{
 
 const GetGrades = async(req, res) => {
     try{
-        const grades = await Grade.find({})
+        const {user_id} = req.query;
+        const grades = await Grade.find({user_id: user_id})
         res.status(StatusCodes.OK).json(grades);
     }
     catch(error){
@@ -39,6 +46,9 @@ const DeleteGrade = async(req, res) => {
     try{
         const {id} = req.params;
         const grade = await Grade.findByIdAndDelete(id);
+        const user = await User.findById(grade.user_id);
+        user.grades = user.grades.filter((gid) => gid !== id);
+        await user.save();
         res.status(StatusCodes.OK).json(grade);
     }
     catch(error){
