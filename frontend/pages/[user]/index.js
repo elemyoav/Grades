@@ -7,9 +7,9 @@ const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 const USERS_URL = BACKEND_URL + "/users";
 
 export async function getStaticPaths() {
-    const users = ['elemyoav', 'elem', 'elem2'];
+    const users = await axios.get(USERS_URL+"/names");
     return {
-        paths: users.map(u=>{
+        paths: users.data.map(u=>{
           return {
             params:{
               user: u

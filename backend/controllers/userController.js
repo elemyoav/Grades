@@ -2,6 +2,18 @@ const { StatusCodes } = require("http-status-codes");
 
 const User = require('../schemas/User');
 
+
+const GetUserNames = async (req, res) => {
+    try{
+        const users = await User.find({});
+        const user_names = users.map(u=>u.name);
+        res.status(StatusCodes.OK).json(user_names);
+    }
+    catch(error){
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("oops something went wrong");
+    }
+}
+
 const AddUser = async (req, res) => {
     try{
         const {username} = req.body;
@@ -39,5 +51,6 @@ const GetUser = async(req, res) => {
 
 module.exports = {
     AddUser,
-    GetUser
+    GetUser,
+    GetUserNames
 }

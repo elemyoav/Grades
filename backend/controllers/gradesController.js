@@ -1,7 +1,7 @@
 const { StatusCodes } = require("http-status-codes");
 
 
-const Grade = require('../schemas/Grades');
+const Grade = require('../schemas/Grade');
 const User = require('../schemas/User');
 
 
